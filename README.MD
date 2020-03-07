@@ -6,8 +6,6 @@ The purpose of this document is to offer a guide for the configuration of two ke
 
 For example, as of the time of this writing, the URL below illustrates Azure Front Door routing http traffic to Azure Application Gateway which routes http traffic to backend web services. 
 
-(Internet --> Azure Front Door --> Azure Application Gateway --> Web App)
-
 - https://docs.microsoft.com/en-us/azure/frontdoor/front-door-lb-with-azure-app-delivery-suite#building-with-azures-application-delivery-suite
 
 However, there is limited how-to documentation to impleemnt this configuration end to end (with end to end SSL). This guide is intended to account for that.
@@ -23,4 +21,15 @@ This is one of my favorite Azure Services. Designed by Microsoft for some of the
 Whereas Azure Front Door is global, Azure Application Gateway is regional. Azure Application Gateway is also a layer 7 application delivery controller and has some added features such as the ability to perform connection draining, act as an ingress controller for Azure Kubernetes Service and can publically expose a private backend (whereas Front Door requires a public endpoint). See more at the URL below.
 
 - https://azure.microsoft.com/en-us/services/application-gateway/
+
+### The Design Architecture
+
+The assumption in this design is as follows.
+
+- (Internet --> Azure Front Door --> Azure Application Gateway --> Web App)
+
+### Architecture Diagram
+
+![GitHub Logo](/images/afd_highlevel.jpg)
+
 
