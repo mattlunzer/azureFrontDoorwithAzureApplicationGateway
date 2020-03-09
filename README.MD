@@ -84,8 +84,16 @@ The configuration of Azure Application Gateway as defined above will fail the he
     A. Create a new (https) listener for the health probe. Apply your pre-existing multi-domain or wildcard certificate, or upload a new certificate. Configure the listener as multi-site and provide a custom domain name (e.g. appgw.customer.com)
 
     B. Add a request routing rule with your listener configured as the front end and your backend target and http settings as defined previously
-    
+
     C. Create an A record in your public DNS that points to the health probe listener hostname to the public IP address of the Azure Application Gateway
 
-#### Azure Front Door Configuration
+### Azure Front Door Configuration
+
+1. Deploy Azure Front Door in accordance to your standards. Key configuration points.
+
+    A. Configure a globally unique front end (e.g. [name].azurefd.net). Note that you will need to create a CNAME record in your public DNS that represents your web application (e.g. www.customer.com) which points to the hostname of the Front Door
+
+    B. Add a backend pool, choose the backend type as Application Gateway, navigate to the Appication Gateway object, and clear the configuration on backend host header value (Front Door will pass the request header)
+
+    C. Add a routing rule and provision the Front Door.
 
