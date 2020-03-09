@@ -32,7 +32,7 @@ The intent of this architecture is to expose an external facing web application.
 - Containerized services
 - Virtual Machines
 
-Like many services in Azure, Azure Front Door and Azure Application Gateway are hybrid and support web applications that run in and outside of Azure, including in customer data centers or 3rd party cloud platforms such as aws.
+Like many services in Azure, Azure Front Door and Azure Application Gateway are hybrid and support web applications that run in and outside of Azure, including in customer data centers or 3rd party cloud platforms such as aws. 
 
 ## The Design Architecture
 
@@ -43,4 +43,21 @@ The assumption in this design is as follows.
 ### Architecture Diagram
 
 ![GitHub Logo](/images/afd_highlevel.jpg)
+
+Now let's get down to the configuration.
+
+* Tip - Deploy the Web Application, Azure Application Gateway, and Azure Front Door, in that order. At each step, apply your custom domain (e.g. customer.com), your SSL certificate (*.customer.com), point your public dns record to the service and test. Not very DevOps friendly, but helpful if you are verifying your architecture configuration and or learning. 
+
+### Azure Web App Configuration
+
+1. Configure the web application in accordance to your standards.
+
+2. Configure a custom domain name. In the case of Azure App Service, here is a good good walkthrough. https://docs.microsoft.com/en-us/Azure/app-service/app-service-web-tutorial-custom-domain
+
+- Tip - if your web url is already mapped to Front Door, you can use awverify to add a host header to App Services
+<https://docs.microsoft.com/en-us/Azure/app-service/web-sites-traffic-manager-custom-domain-name>
+
+3. For end-to-end SSL, upload your certificate. Here is a good walkthrough https://docs.microsoft.com/en-us/Azure/app-service/configure-ssl-certificate
+
+- Tip - if you want to offload SSL, you can do so on Front Door or Application Gateway. In that case, no certificate is required as traffic will flow to your application unencrypted over http
 
