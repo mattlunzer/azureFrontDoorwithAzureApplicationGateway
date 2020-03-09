@@ -54,20 +54,34 @@ Tip - Deploy the Web Application, Azure Application Gateway, and Azure Front Doo
 
 2. Configure a custom domain name. In the case of Azure App Service, here is a good good walkthrough. https://docs.microsoft.com/en-us/Azure/app-service/app-service-web-tutorial-custom-domain
 
-    Tip - if your web url is already mapped to Front Door, you can use awverify to add a host header to App Services
+    Tip - if your web url is already mapped to Front Door or another service, you can use awverify to add a host header to App Services
 <https://docs.microsoft.com/en-us/Azure/app-service/web-sites-traffic-manager-custom-domain-name>
 
-3. For end-to-end SSL, upload your certificate. Here is a good walkthrough https://docs.microsoft.com/en-us/Azure/app-service/configure-ssl-certificate
+3. For end-to-end SSL, upload your certificate. For App Service, here is a good walkthrough https://docs.microsoft.com/en-us/Azure/app-service/configure-ssl-certificate
 
-    Tip - if you want to offload SSL, you can do so on Front Door or Application Gateway. In that case, no certificate is required as traffic will flow to your application unencrypted over http. While this will alleviate the cryptographic overhead on your web farm (e.g. CPU cycles) you must accept the risk associated with traffic from your ADC being unencrypted.
+    Tip - if you want to offload SSL, you can do so on Front Door or Application Gateway. In that case, no certificate is required for your web application as traffic will flow  unencrypted over http. While this will alleviate the cryptographic overhead on your web farm (e.g. CPU cycles) you must accept the risk associated with traffic from Application Gateway being unencrypted.
+    
+    *Given decision point above know that (natively) any traffic between Azure Services does NOT traverse the public Internet*
 
 ### Azure Application Gateway Configuration
 
-1. Deploy Azure Application Gateway (v2) in accordance to your standards. Note that the Application Gateway MUST have a public IP address (or Front Door will not be able to reach it). Note the public IP is static (we will use it for DNS A record in step 3).
+1. Deploy Azure Application Gateway (v2) in accordance to your standards. Key configuration points.
+    
+    A. Deploy Azure Application Gateway v2. Many benefits over v1. Include the Web Application Firewall if you wish (suggested).
 
-2. During provisioning upload or use your certificate stored in Azure Key Vault (Managed Identity Required) for your https listener. You will need the certificate to support SSL traffic coming from Azure Front Door. Unless you are using named certificates, upload a multi-domain (e.g. SAN) or wildcard certificate. This will save you a bit of time for the next step. 
+    B. Provision a public instance. A public instance includes a static public IP address. Recall that Azure Front Door requires a publically accessible backend. Also, the IP address is used needed for the DNS configuration.
 
-#### Important - Configure a listener for the Front Door Health Probe
+    C. Upload your certificate or refer to Azure Key Vault (requires Managed Identity). If possible, use a multi-site (e.g. SAN) or wildcard certificate (*.customer.com) otherwise you will need a second certificate for the health probe listiner.
+    
+    D. Configure a multi-site listener type (we will create a 2nd listener for the health probe). In the the hostname field, include the name of your web application (e.g. www.customer.com)
 
-3. Once Application Gateway is successfully deployed, configure a listner for the Azure Front Door health probe. Map a custom domain name via a unique DNS A record in your public DNS (e.g appgw.customer.com) and ensure it associates with the certificate you already uploaded during provisioning, or upload a new certificate. Failure to configure a lister with a properly configured custom domain name and ssl certificate will cause the Azure Front Door health probe to fail which renders the backend unavailable.
+#### *Important - Configure a listener for the Front Door Health Probe
+
+The configuration of Azure Application Gateway as defined above will fail the health probe if the listener is configured for https. Azure Application Gateway does not provision with an ssl certificate and probing the public IP address will fail the SSL Handshake and thus, render the backend offline.
+
+2. Once Application Gateway is successfully deployed, configure a new listner for the Azure Front Door health probe, particularly if you have configured the listener above as 
+
+    A. Create a new (https) listener for the health probe. Apply your pre-existing multi-domain or wildcard certificate, or upload a new certificate. Configure the listener as multi-site and provide a custom domain name (e.g. appgw.customer.com)
+
+    B.  Create an A record in your public DNS that points to the hostname to the public IP address of the Azure Application Gateway
 
