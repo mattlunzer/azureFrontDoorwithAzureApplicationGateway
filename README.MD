@@ -79,9 +79,13 @@ Tip - Deploy the Web Application, Azure Application Gateway, and Azure Front Doo
 
 The configuration of Azure Application Gateway as defined above will fail the health probe if the listener is configured for https. Azure Application Gateway does not provision with an ssl certificate and probing the public IP address will fail the SSL Handshake and thus, render the backend offline.
 
-2. Once Application Gateway is successfully deployed, configure a new listner for the Azure Front Door health probe, particularly if you have configured the listener above as 
+2. Once Application Gateway is successfully deployed, configure a new listner for the Azure Front Door health probe.
 
     A. Create a new (https) listener for the health probe. Apply your pre-existing multi-domain or wildcard certificate, or upload a new certificate. Configure the listener as multi-site and provide a custom domain name (e.g. appgw.customer.com)
 
-    B.  Create an A record in your public DNS that points to the hostname to the public IP address of the Azure Application Gateway
+    B. Add a request routing rule with your listener configured as the front end and your backend target and http settings as defined previously
+    
+    C.  Create an A record in your public DNS that points to the health probe listener hostname to the public IP address of the Azure Application Gateway
+
+#### Azure Front Door Configuration
 
