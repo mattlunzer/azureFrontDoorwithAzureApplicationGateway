@@ -54,10 +54,10 @@ Now let's get down to the configuration.
 
 2. Configure a custom domain name. In the case of Azure App Service, here is a good good walkthrough. https://docs.microsoft.com/en-us/Azure/app-service/app-service-web-tutorial-custom-domain
 
-- Tip - if your web url is already mapped to Front Door, you can use awverify to add a host header to App Services
+-     Tip - if your web url is already mapped to Front Door, you can use awverify to add a host header to App Services
 <https://docs.microsoft.com/en-us/Azure/app-service/web-sites-traffic-manager-custom-domain-name>
 
 3. For end-to-end SSL, upload your certificate. Here is a good walkthrough https://docs.microsoft.com/en-us/Azure/app-service/configure-ssl-certificate
 
-- Tip - if you want to offload SSL, you can do so on Front Door or Application Gateway. In that case, no certificate is required as traffic will flow to your application unencrypted over http
+-     Tip - if you want to offload SSL, you can do so on Front Door or Application Gateway. In that case, no certificate is required as traffic will flow to your application unencrypted over http
 
