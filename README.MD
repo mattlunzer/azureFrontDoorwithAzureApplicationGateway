@@ -97,3 +97,20 @@ The configuration of Azure Application Gateway as defined above will fail the he
 
     C. Add a routing rule and provision the Front Door.
 
+2. Add a new Front End\Custom Domain Name
+
+    A. Apply a custom hostname (e.g. www.customer.com). This requires your CNAME in the step above is configured properly.
+    
+    B. Configure custom domain https. You can use a Front Door generated certificate or upload your own certificate (requires Key Vault and a PFX file with NO password)
+
+    C. Update the routing rule with the new Front End
+
+    D. Update the backend hostname. By default, Azure Front Door will configure the public IP address of the Azure Applciation Gateway. Unfortnately, this configuration will fail the health probe as the Appliation Gateway does not provision with an SSL certificate (SSL Handshake will fail) and no hostname is configured. Update this value with the hostname of your healthprobe listener (e.g. appgw.customer.com)
+
+    E. You may need to clear the backend host header value as updating the backend hostname will also update the backend host header. Update and save the configuration. 
+
+### Test!!!
+
+At this point, hopefully everything works! Go to your web URL (e.g. www.customer.com) and verify functionality. If things are not working right, verify all of the above but specifically make sure the healthprobe listener on the Application Gateway is configured properly as the backend configuration in Azure Front Door. 
+
+I hope you found this helpful, I'm unaware of any documentation that covers this scenario end to end so wanted to document it based on my experience.
