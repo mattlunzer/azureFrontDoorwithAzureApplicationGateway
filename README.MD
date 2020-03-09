@@ -46,7 +46,7 @@ The assumption in this design is as follows.
 
 Now let's get down to the configuration.
 
-* Tip - Deploy the Web Application, Azure Application Gateway, and Azure Front Door, in that order. At each step, apply your custom domain (e.g. customer.com), your SSL certificate (*.customer.com), point your public dns record to the service and test. Not very DevOps friendly, but helpful if you are verifying your architecture configuration and or learning. 
+    Tip - Deploy the Web Application, Azure Application Gateway, and Azure Front Door, in that order. At each step, apply your custom domain (e.g. customer.com), your SSL certificate (*.customer.com), point your public dns record to the service and test. Not very DevOps friendly, but helpful if you are verifying your architecture configuration and or learning. 
 
 ### Azure Web App Configuration
 
@@ -59,7 +59,7 @@ Now let's get down to the configuration.
 
 3. For end-to-end SSL, upload your certificate. Here is a good walkthrough https://docs.microsoft.com/en-us/Azure/app-service/configure-ssl-certificate
 
-    Tip - if you want to offload SSL, you can do so on Front Door or Application Gateway. In that case, no certificate is required as traffic will flow to your application unencrypted over http. This will alleviate the cryptographic overhead on your web farm and save precious CPU cycles. 
+    Tip - if you want to offload SSL, you can do so on Front Door or Application Gateway. In that case, no certificate is required as traffic will flow to your application unencrypted over http. While this will alleviate the cryptographic overhead on your web farm (e.g. CPU cycles) you must accept the risk associated with traffic from your ADC being unencrypted.
 
 ### Azure Application Gateway Configuraiotn
 
