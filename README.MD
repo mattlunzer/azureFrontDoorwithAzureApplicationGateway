@@ -38,7 +38,7 @@ Like many services in Azure, Azure Front Door and Azure Application Gateway are 
 
 The assumption in this design is as follows.
 
-- (Internet --> Azure Front Door --> Azure Application Gateway --> Web App)
+- (Internet --> Azure Front Door --> Azure Application Gateway --> (Azure) Web App)
 
 ### Architecture Diagram
 
@@ -85,7 +85,7 @@ The configuration of Azure Application Gateway as defined above will fail the he
 
     B. Add a request routing rule with your listener configured as the front end and your backend target and http settings as defined previously
     
-    C.  Create an A record in your public DNS that points to the health probe listener hostname to the public IP address of the Azure Application Gateway
+    C. Create an A record in your public DNS that points to the health probe listener hostname to the public IP address of the Azure Application Gateway
 
 #### Azure Front Door Configuration
 
