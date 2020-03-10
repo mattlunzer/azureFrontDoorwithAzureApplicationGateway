@@ -8,7 +8,7 @@ For example, as of the time of this writing, the URL below illustrates Azure Fro
 
 - https://docs.microsoft.com/en-us/azure/frontdoor/front-door-lb-with-azure-app-delivery-suite#building-with-azures-application-delivery-suite
 
-However, there is limited how-to documentation to impleemnt this configuration end to end (with end to end SSL). This guide is intended to account for that.
+However, there is limited how-to documentation to implement this configuration end to end (with end to end SSL). This guide is intended to account for that.
 
 ## Key Components
 
@@ -54,7 +54,7 @@ Tip - Deploy the Web Application, Azure Application Gateway, and Azure Front Doo
 
 2. Configure a custom domain name. In the case of Azure App Service, here is a good good walkthrough. https://docs.microsoft.com/en-us/Azure/app-service/app-service-web-tutorial-custom-domain
 
-    Tip - if your web url is already mapped to Front Door or another service, you can use awverify to add a host header to App Services
+    Tip - if your web url is already mapped to Front Door or another service, you can use asverify to add a host header to App Services
 <https://docs.microsoft.com/en-us/Azure/app-service/web-sites-traffic-manager-custom-domain-name>
 
 3. For end-to-end SSL, upload your certificate. For App Service, here is a good walkthrough https://docs.microsoft.com/en-us/Azure/app-service/configure-ssl-certificate
@@ -113,6 +113,6 @@ The configuration of Azure Application Gateway as defined above will fail the he
 
 ### Test!!!
 
-At this point, hopefully everything works! Go to your web URL (e.g. www.customer.com) and verify functionality. If things are not working right, verify all of the above but specifically make sure the healthprobe listener on the Application Gateway is configured properly as the backend configuration in Azure Front Door. 
+At this point, hopefully everything works! Go to your web URL (e.g. www.customer.com) and verify functionality. If things are not working right, verify all of the above but specifically make sure the health probe listener on the Application Gateway is configured properly as the backend configuration in Azure Front Door. 
 
 I hope you found this helpful, I'm unaware of any documentation that covers this scenario end to end so wanted to document it based on my experience.
