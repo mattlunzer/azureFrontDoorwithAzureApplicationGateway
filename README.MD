@@ -97,6 +97,8 @@ The configuration of Azure Application Gateway as defined above will fail the he
 
     C. Add a routing rule and provision the Front Door.
 
+#### *Important - Configure a new Front End and reconfigure the backend
+
 2. Add a new Front End\Custom Domain Name
 
     A. Apply a custom hostname (e.g. www.customer.com). This requires your CNAME in the step above is configured properly.
