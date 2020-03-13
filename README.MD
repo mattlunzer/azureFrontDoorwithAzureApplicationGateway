@@ -46,7 +46,7 @@ The assumption in this design is as follows.
 
 Now let's get down to the configuration.
 
-Tip - Deploy the Web Application, Azure Application Gateway, and Azure Front Door, in that order. At each step, apply your custom domain (e.g. customer.com), your SSL certificate (*.customer.com), point your public dns record to the service and test. Not very DevOps friendly, but helpful if you are verifying your architecture configuration and or learning. 
+Tip - Deploy the Web Application, Azure Application Gateway, and Azure Front Door, in that order. At each step, apply your custom domain (e.g. contoso.com), your SSL certificate (*.contoso.com), point your public dns record to the service and test. Not very DevOps friendly, but helpful if you are verifying your architecture configuration and or learning. 
 
 ### Azure Web App Configuration
 
@@ -71,9 +71,9 @@ Tip - Deploy the Web Application, Azure Application Gateway, and Azure Front Doo
 
     B. Provision a public instance. A public instance includes a static public IP address. Recall that Azure Front Door requires a publically accessible backend. Also, the IP address is used needed for the DNS configuration.
 
-    C. Upload your certificate or refer to Azure Key Vault (requires Managed Identity). If possible, use a multi-site (e.g. SAN) or wildcard certificate (*.customer.com) otherwise you will need a second certificate for the health probe listiner.
+    C. Upload your certificate or refer to Azure Key Vault (requires Managed Identity). If possible, use a multi-site (e.g. SAN) or wildcard certificate (*.contoso.com) otherwise you will need a second certificate for the health probe listiner.
     
-    D. Configure a multi-site listener type (we will create a 2nd listener for the health probe). In the the hostname field, include the name of your web application (e.g. www.customer.com)
+    D. Configure a multi-site listener type (we will create a 2nd listener for the health probe). In the the hostname field, include the name of your web application (e.g. www.contoso.com)
 
 #### *Important - Configure a listener for the Front Door Health Probe
 
@@ -81,7 +81,7 @@ The configuration of Azure Application Gateway as defined above will fail the he
 
 2. Once Application Gateway is successfully deployed, configure a new listner for the Azure Front Door health probe.
 
-    A. Create a new (https) listener for the health probe. Apply your pre-existing multi-domain or wildcard certificate, or upload a new certificate. Configure the listener as multi-site and provide a custom domain name (e.g. appgw.customer.com)
+    A. Create a new (https) listener for the health probe. Apply your pre-existing multi-domain or wildcard certificate, or upload a new certificate. Configure the listener as multi-site and provide a custom domain name (e.g. appgw.contoso.com)
 
     B. Add a request routing rule with your listener configured as the front end and your backend target and http settings as defined previously
 
@@ -91,7 +91,7 @@ The configuration of Azure Application Gateway as defined above will fail the he
 
 1. Deploy Azure Front Door in accordance to your standards. Key configuration points.
 
-    A. Configure a globally unique front end (e.g. [name].azurefd.net). Note that you will need to create a CNAME record in your public DNS that represents your web application (e.g. www.customer.com) which points to the hostname of the Front Door
+    A. Configure a globally unique front end (e.g. [name].azurefd.net). Note that you will need to create a CNAME record in your public DNS that represents your web application (e.g. www.contoso.com) which points to the hostname of the Front Door
 
     B. Add a backend pool, choose the backend type as Application Gateway, navigate to the Appication Gateway object, and clear the configuration on backend host header value (Front Door will pass the request header)
 
@@ -101,18 +101,18 @@ The configuration of Azure Application Gateway as defined above will fail the he
 
 2. Add a new Front End\Custom Domain Name
 
-    A. Apply a custom hostname (e.g. www.customer.com). This requires your CNAME in the step above is configured properly.
+    A. Apply a custom hostname (e.g. www.contoso.com). This requires your CNAME in the step above is configured properly.
     
     B. Configure custom domain https. You can use a Front Door generated certificate or upload your own certificate (requires Key Vault and a PFX file with NO password)
 
     C. Update the routing rule with the new Front End
 
-    D. Update the backend hostname. By default, Azure Front Door will configure the public IP address of the Azure Applciation Gateway. Unfortnately, this configuration will fail the health probe as the Appliation Gateway does not provision with an SSL certificate (SSL Handshake will fail) and no hostname is configured. Update this value with the hostname of your healthprobe listener (e.g. appgw.customer.com)
+    D. Update the backend hostname. By default, Azure Front Door will configure the public IP address of the Azure Applciation Gateway. Unfortnately, this configuration will fail the health probe as the Appliation Gateway does not provision with an SSL certificate (SSL Handshake will fail) and no hostname is configured. Update this value with the hostname of your healthprobe listener (e.g. appgw.contoso.com)
 
     E. You may need to clear the backend host header value as updating the backend hostname will also update the backend host header. Update and save the configuration. 
 
 ### Test!!!
 
-At this point, hopefully everything works! Go to your web URL (e.g. www.customer.com) and verify functionality. If things are not working right, verify all of the above but specifically make sure the healthprobe listener on the Application Gateway is configured properly as the backend configuration in Azure Front Door. 
+At this point, hopefully everything works! Go to your web URL (e.g. www.contoso.com) and verify functionality. If things are not working right, verify all of the above but specifically make sure the healthprobe listener on the Application Gateway is configured properly as the backend configuration in Azure Front Door. 
 
 I hope you found this helpful, I'm unaware of any documentation that covers this scenario end to end so wanted to document it based on my experience.
